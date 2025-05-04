@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: . # Контекст - корень проекта
+      dockerfile: server/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./postgresql/root.crt:/root/.postgresql/root.crt:ro
+    networks:
+      - weather-network
+
+  client:
+    build:
+      context: ./client # Теперь контекст - папка client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - weather-network
+
+networks:
+  weather-network:
+    driver: bridge

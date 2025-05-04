@@ -10,10 +10,10 @@ app.use(express.json());
 
 // Подключение к PostgreSQL
 const pool = new Pool({
-    connectionString: process.env.DB_CONNECTION_STRING || "postgres://golubev:6gjs6lie@rc1a-ifib83e5rn7qyi7f.mdb.yandexcloud.net:6432/weather",
+    connectionString: process.env.DB_CONNECTION_STRING,
     ssl: {
         rejectUnauthorized: true,
-        ca: fs.readFileSync(process.env.PG_SSL_CA || "C:/Users/ddgol/.postgresql/root.crt").toString(),
+        ca: fs.readFileSync(process.env.PG_SSL_CA).toString(),
     },
 });
 
