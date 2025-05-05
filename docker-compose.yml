@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   server:
-    build:
-      context: . # Контекст - корень проекта
-      dockerfile: server/Dockerfile
+    image: cr.yandex/crp57d2amknkinm23mfn/weather-app-server:latest
     env_file:
       - .env
     ports:
@@ -13,17 +11,17 @@ services:
       - ./postgresql/root.crt:/root/.postgresql/root.crt:ro
     networks:
       - weather-network
+    restart: unless-stopped
 
   client:
-    build:
-      context: ./client # Теперь контекст - папка client
-      dockerfile: Dockerfile
+    image: cr.yandex/crp57d2amknkinm23mfn/weather-app-client:latest
     ports:
       - "80:80"
     depends_on:
       - server
     networks:
       - weather-network
+    restart: unless-stopped
 
 networks:
   weather-network:
