@@ -1,0 +1,33 @@
+name: Deploy to Yandex Cloud
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: |
+        cd server && npm install
+        cd ../client && npm install
+
+    - name: Build and deploy client
+      run: cd server && npm run deploy-client
+      env:
+        YC_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+        YC_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+
+    - name: Deploy server
+      run: |
+        docker login --username iam --password ${{ secrets.YC_DOCKER_PASSWORD }} cr.yandex
+        docker-compose up -d
