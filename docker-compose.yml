@@ -11,6 +11,9 @@ services:
       - ./postgresql/root.crt:/root/.postgresql/root.crt:ro
     networks:
       - weather-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     restart: unless-stopped
 
   client:
